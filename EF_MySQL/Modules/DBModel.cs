@@ -11,10 +11,14 @@ namespace EF_MySQL.Modules
 {
     public class DBModel : DbContext
     {
+
+        public DbSet<ClassGrade> ClassGrade { get; set; }
+        public DbSet<Student> Student { get; set; }
+
         //配置连接字符串
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql("", new ServerVersion(8, 0, 26));
+            optionsBuilder.UseMySql("server=localhost;user id=root;password=newreportTest321;database=ef_test;Character Set=utf8;", new MySqlServerVersion(new Version(8, 0, 26)));
         }
 
         //创建时配置
@@ -24,9 +28,14 @@ namespace EF_MySQL.Modules
 
         }
     }
+    public class ClassGrade
+    {
+        public int Id { get; set; }
 
-    [Table("people")]
-    public class Person
+        public string ClassName { get; set; }
+    }
+    [Table("student")]
+    public class Student
     {
         [Key]
         public int Id { get; set; }
@@ -34,5 +43,12 @@ namespace EF_MySQL.Modules
         /// 名字
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 外键
+        /// </summary>
+        public int ClassGradeId { get; set; }
     }
+
+
+
 }
