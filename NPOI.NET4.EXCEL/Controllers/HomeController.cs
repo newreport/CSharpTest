@@ -1,4 +1,6 @@
-﻿using NPOI.NET4.EXCEL.Models;
+﻿using NPOI.HSSF.UserModel;
+using NPOI.NET4.EXCEL.Models;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,9 +36,8 @@ namespace NPOI.NET4.EXCEL.Controllers
             return "连接成功!";
         }
 
-
+        //http://localhost:53581/Home/GetExcel
         [HttpGet]
-
         public async Task<FileResult> GetExcel()
         {
             using (Stream stream = await Task.Run(TableToExcelByNPOI))
@@ -54,6 +55,15 @@ namespace NPOI.NET4.EXCEL.Controllers
         {
             MemoryStream ms = new MemoryStream();
 
+            //新建工作簿
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            foreach (var item in users)
+            {
+                //新建工作表
+                ISheet sheet = workbook.CreateSheet();
+
+
+            }
 
             return ms;
         }
