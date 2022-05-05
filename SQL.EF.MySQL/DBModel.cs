@@ -7,11 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EF_MySQL.Modules
+namespace SQL.EF.MySQL
 {
     public class DBModel : DbContext
     {
-
         public DbSet<ClassGrade> ClassGrade { get; set; }
         public DbSet<Student> Student { get; set; }
 
@@ -27,7 +26,10 @@ namespace EF_MySQL.Modules
 
 
         }
+
     }
+
+
     public class ClassGrade
     {
         public int Id { get; set; }
@@ -48,7 +50,5 @@ namespace EF_MySQL.Modules
         /// </summary>
         public int ClassGradeId { get; set; }
     }
-
-
 
 }
