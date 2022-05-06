@@ -13,15 +13,17 @@ namespace NPOI.NET4.EXCEL.Controllers
 {
     public class HomeController : Controller
     {
+        List<User> users;
+
         public HomeController()
         {
+            users = new List<User>();
             for (int i = 0; i < 10; i++)
             {
                 users.Add(new Models.User() { ID = i });
             }
         }
 
-        List<User> users;
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
@@ -40,15 +42,14 @@ namespace NPOI.NET4.EXCEL.Controllers
         [HttpGet]
         public async Task<FileResult> GetExcel()
         {
-            using (Stream stream = await Task.Run(TableToExcelByNPOI))
-            {
+            Stream stream = await Task.Run(TableToExcelByNPOI);
+
+            stream.Position = 0;//将stream开始读取位置置为0
 
 
+            var actionresult = new FileStreamResult(stream, "text/csv");
+            return actionresult;
 
-
-                var actionresult = new FileStreamResult(stream, "text/csv");
-                return actionresult;
-            }
         }
 
         private Stream TableToExcelByNPOI()
@@ -60,11 +61,20 @@ namespace NPOI.NET4.EXCEL.Controllers
             foreach (var item in users)
             {
                 //新建工作表
-                ISheet sheet = workbook.CreateSheet();
-
-
+                ISheet sheet = workbook.CreateSheet(item.ID.ToString());
+                IRow row1 = sheet.CreateRow(0);
+                row1.CreateCell(0).SetCellValue(item.Name);
+                int i = 1;
+                foreach (var it in item.details)
+                {
+                    IRow rowTemp = sheet.CreateRow(i);
+                    rowTemp.Height = 62 * 20;
+                    rowTemp.CreateCell(0).SetCellValue(it.ID);
+                    rowTemp.CreateCell(1).SetCellValue(it.createTime);
+                    i++;
+                }
             }
-
+            workbook.Write(ms);
             return ms;
         }
     }
